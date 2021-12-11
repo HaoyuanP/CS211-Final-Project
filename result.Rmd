@@ -1,0 +1,86 @@
+---
+title: "cs211"
+author: "Haoyuan Pang"
+date: "12/10/2021"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+wrong_result <- read.csv("wrong_result.csv")
+result <- read.csv("Result_corr.csv")
+
+
+```
+
+
+```{r}
+df <- read.csv("cox-violent-parsed.csv")
+df$s_color[df$race =="Caucasian"]<-"0"
+df$s_color[df$race =="African-American"]<-"1"
+df$s_color[df$race =="Asian"]<-"1"
+df$s_color[df$race =="Hispanic"]<-"1"
+df$s_color[df$race =="Native American"]<-"1"
+df$s_color[df$race =="Other"]<-"1"
+
+df %>% ggplot(aes(x = s_color, y = decile_score, fill = decile_score)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "score based on skin color (real darta)",
+       x = "skin_color (0 = white people, 1 = people with color)",
+       y = "decile-score") +
+  theme(legend.position = 'none')
+```
+
+```{r}
+# this is the data with correlation before separating 
+result %>% ggplot(aes(x = race, y = decile_score, fill = decile_score)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "score based on skin color (synthetic data)",
+       x = "race)",
+       y = "decile-score") +
+  theme(legend.position = 'none')
+```
+
+```{r}
+# this is data without correlation
+wrong_result$s_color[wrong_result$race =="Caucasian"]<-"0"
+wrong_result$s_color[wrong_result$race =="African-American"]<-"1"
+wrong_result$s_color[wrong_result$race =="Asian"]<-"1"
+wrong_result$s_color[wrong_result$race =="Hispanic"]<-"1"
+wrong_result$s_color[wrong_result$race =="Native American"]<-"1"
+wrong_result$s_color[wrong_result$race =="Other"]<-"1"
+
+wrong_result %>% ggplot(aes(x = s_color, y = decile_score, fill = decile_score)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "score based on skin color (synthetic data that two columns with out correlation)",
+       x = "skin_color (0 = white people, 1 = people with color)",
+       y = "decile-score") +
+  theme(legend.position = 'none')
+```
+
+```{r}
+# this is data with correlation between two groups
+result$s_color[result$race =="Caucasian"]<-"0"
+result$s_color[result$race =="African-American"]<-"1"
+result$s_color[result$race =="Asian"]<-"1"
+result$s_color[result$race =="Hispanic"]<-"1"
+result$s_color[result$race =="Native American"]<-"1"
+result$s_color[result$race =="Other"]<-"1"
+
+result %>% ggplot(aes(x = s_color, y = decile_score, fill = decile_score)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "score based on skin color (synthetic data with correlation)",
+       x = "skin_color (0 = white people, 1 = people with color)",
+       y = "decile-score") +
+  theme(legend.position = 'none')
+
+```
+
+
